@@ -1,10 +1,7 @@
-FROM microsoft/dotnet:2.1-sdk
-RUN mkdir /app
-WORKDIR /app
-COPY FreshApp/FreshApp/*.csproj .
+# copy csproj and restore as distinct layers
+COPY *.csproj ./
 RUN dotnet restore
-COPY FreshApp/FreshApp/ .
+# copy and build everything else
+COPY . ./
 RUN dotnet publish -c Release -o out
-RUN ls -lrt
-EXPOSE 8080
-CMD ["dotnet", "/app/bin/Release/netcoreapp2.1/FreshApp.dll"]
+ENTRYPOINT ["dotnet", "out/Hello.dll"]
